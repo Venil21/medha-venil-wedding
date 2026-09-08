@@ -630,11 +630,11 @@
         <div class="field">
           <label>Which events will you attend?</label>
           <div class="check-grid">
-            <label class="check-item"><input type="checkbox" name="events" value="Haldi (Nov 4, 9am)"> Haldi — Nov 4, 9am</label>
-            <label class="check-item"><input type="checkbox" name="events" value="Mehendi (Nov 4, 1pm)"> Mehendi — Nov 4, 1pm</label>
-            <label class="check-item"><input type="checkbox" name="events" value="Sangeet DJ Nite (Nov 4, 7:30pm)"> Sangeet — Nov 4, 7:30pm</label>
-            <label class="check-item"><input type="checkbox" name="events" value="Haldi & Games (Nov 5, 10am)"> Haldi & Games — Nov 5, 10am</label>
-            <label class="check-item"><input type="checkbox" name="events" value="Wedding & Reception (Nov 5)"> Wedding & Reception — Nov 5</label>
+            <label class="check-item"><input type="checkbox" class="event-check" value="Haldi (Nov 4, 9am)"> Haldi — Nov 4, 9am</label>
+            <label class="check-item"><input type="checkbox" class="event-check" value="Mehendi (Nov 4, 1pm)"> Mehendi — Nov 4, 1pm</label>
+            <label class="check-item"><input type="checkbox" class="event-check" value="Sangeet DJ Nite (Nov 4, 7:30pm)"> Sangeet — Nov 4, 7:30pm</label>
+            <label class="check-item"><input type="checkbox" class="event-check" value="Haldi & Games (Nov 5, 10am)"> Haldi & Games — Nov 5, 10am</label>
+            <label class="check-item"><input type="checkbox" class="event-check" value="Wedding & Reception (Nov 5)"> Wedding & Reception — Nov 5</label>
           </div>
         </div>
         <div class="field">
@@ -700,6 +700,14 @@
 
     try{
       const formData = new FormData(form);
+
+      // Combine all checked events into ONE field — FormSubmit only keeps the
+      // last value when several fields share a name, so we join them ourselves.
+      const selectedEvents = Array.from(document.querySelectorAll('.event-check:checked'))
+        .map(cb => cb.value)
+        .join(', ');
+      formData.set('events', selectedEvents || 'None selected');
+
       const response = await fetch(form.action, {
         method: 'POST',
         body: formData,
@@ -724,4 +732,3 @@
 
 </body>
 </html>
-```[cite: 1]
